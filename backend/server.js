@@ -4,12 +4,13 @@ import cors from 'cors';
 import dotevn from 'dotenv';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
-import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-import authRoutes from './routes/authRoutes.js';
+import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
+import usersRoutes from './routes/usersRoutes.js';
 dotevn.config();
 connectDB();
 const PORT = process.env.PORT || 8000;
 const app = express();
+const server = http.createServer(app);
 
 app.use(cors());
 app.use(express.json());
@@ -19,12 +20,11 @@ app.use(cookieParser());
 app.get('/', (req, res) => {
   res.send('api server is running');
 });
-app.use('/api/auth', authRoutes);
+app.use('/api/users', usersRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
 
-const server = http.createServer(app);
 server.listen(PORT, () => {
   console.log(`server listening on ${PORT}`);
 });
